@@ -69,7 +69,7 @@ function start_target_instance() {
 	npm install > /dev/null || exit 1
 	nohup npm start -- --port=$target_port --log-dir=../logs > /dev/null || exit 1 &
 
-	echo "application installed"
+	echo "application installed and started"
 
 	cd $script_home
 }
@@ -95,9 +95,13 @@ function show_result() {
 		exit 1
 	fi
 
+	cd $deploy_dir/$target_instance
+	rev_count=$(git rev-list HEAD --count)
+	cd $script_home
+
 	echo ""
 	echo "Now active: $target_instance listening on $target_port running on $active_pid"
-	echo "Git revision count: $(git --git-dir $deploy_dir/$target_instance rev-list HEAD --count)"
+	echo "Git revision count: $rev_count"
 }
 
 get_instance_info
@@ -107,6 +111,8 @@ create_instance_dirs
 kill_target_instance
 download_new_source
 start_target_instance
+
+sleep 2 # wait for the server to start
 
 activate_target_instance
 show_result
