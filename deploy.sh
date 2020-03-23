@@ -69,6 +69,8 @@ function start_target_instance() {
 	npm install > /dev/null || exit 1
 	nohup npm start -- --port=$target_port --log-dir=../logs > /dev/null || exit 1 &
 
+	echo "new version $(git rev-list HEAD --count) started"
+
 	cd $script_home
 }
 
