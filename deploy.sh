@@ -89,6 +89,8 @@ function activate_target_instance() {
 	sudo rm -f /etc/nginx/conf.d/$config_prefix*.conf || exit 1
 	sudo cp $script_home/conf.d/$config_prefix$target_instance.conf /etc/nginx/conf.d/ || exit 1
 
+	sudo systemctl reload nginx || exit 1
+
 	echo "replaced nginx config file"
 }
 
