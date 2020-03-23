@@ -4,6 +4,8 @@
 # We use two instances: A:20201 and B:20202.
 
 script_home="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd)"
+working_dir=$(pwd)
+
 env_file_name='exports.sh'
 config_prefix='cafeteria_'
 remote_source='https://github.com/inu-appcenter/cafeteria-server.git'
@@ -66,13 +68,14 @@ function download_new_source() {
 function start_target_instance() {
 	cd $deploy_dir/$target_instance
 
+
 	npm install > /dev/null || exit 1
 	
 	echo "dependencies installed"
 
 	nohup npm start -- --port=$target_port --log-dir=../logs > /dev/null || exit 1 &
 
-	cd $script_home
+	cd $working_dir
 
 	echo "waiting for process"
 	while [ -z "$(lsof -i tcp:$target_port | grep LISTEN | awk '{print $2}')" ]; do
@@ -104,7 +107,7 @@ function show_result() {
 
 	cd $deploy_dir/$target_instance
 	rev_count=$(git rev-list HEAD --count)
-	cd $script_home
+	cd $working_dir
 
 	echo ""
 	echo "################################ Deploy succeeded ################################"
