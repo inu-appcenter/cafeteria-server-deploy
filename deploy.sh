@@ -97,7 +97,6 @@ function show_result() {
 	fi
 
 	active_pid=$(lsof -i tcp:$target_port | grep LISTEN | awk '{print $2}')
-	echo $active_pid
 	if [ -z "$active_pid" ]; then
 		echo "no process listening on $target_port"
 		exit 1
@@ -108,8 +107,10 @@ function show_result() {
 	cd $script_home
 
 	echo ""
-	echo "Now active: $target_instance listening on $target_port running on $active_pid"
-	echo "Git revision count: $rev_count"
+	echo "################################ Deploy succeeded ################################"
+	echo ""
+	echo "Now active: [$target_instance] listening on [$target_port] running at [$active_pid]"
+	echo "Git revision count: [$rev_count]"
 }
 
 get_instance_info
@@ -119,8 +120,6 @@ create_instance_dirs
 kill_target_instance
 download_new_source
 start_target_instance
-
-sleep 2 # wait for the server to start
 
 activate_target_instance
 show_result
