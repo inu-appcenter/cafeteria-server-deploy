@@ -108,4 +108,4 @@ download_new_source
 start_target_instance
 
 activate_target_instance
-
+show_result
