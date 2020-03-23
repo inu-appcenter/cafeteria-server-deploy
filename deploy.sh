@@ -69,7 +69,7 @@ function start_target_instance() {
 	npm install > /dev/null || exit 1
 	nohup npm start -- --port=$target_port --log-dir=../logs > /dev/null || exit 1 &
 
-	echo "new version $(git rev-list HEAD --count) started"
+	echo "application installed"
 
 	cd $script_home
 }
@@ -79,6 +79,24 @@ function activate_target_instance() {
 	sudo cp $script_home/conf.d/$config_prefix$target_instance.conf /etc/nginx/conf.d/ || exit 1
 
 	echo "replaced nginx config file"
+}
+
+function show_result() {
+	active_instance_port=$(cat /etc/nginx/conf.d/$config_prefix*.conf | grep -o '127.0.0.1:[0-9]*' | sed 's/127\.0\.0\.1://g')
+	if [ "$active_instance_port" != "$target_port" ]; then
+		echo "nginx setting failed"
+		exit 1
+	fi
+
+	active_pid=$(lsof -i tcp:$target_port | grep LISTEN | awk '{print $2}')
+	if [ -z $active_pid ]; then
+		echo "no process running on $target_port"
+		exit 1
+	fi
+
+	echo ""
+	echo "Now active: $target_instance listening on $target_port running on $active_pid"
+	echo "Git revision count: $(git --git-dir $deploy_dir/$target_instance rev-list HEAD --count)"
 }
 
 get_instance_info
