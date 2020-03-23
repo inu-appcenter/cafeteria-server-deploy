@@ -67,11 +67,19 @@ function start_target_instance() {
 	cd $deploy_dir/$target_instance
 
 	npm install > /dev/null || exit 1
+	
+	echo "dependencies installed"
+
 	nohup npm start -- --port=$target_port --log-dir=../logs > /dev/null || exit 1 &
 
-	echo "application installed and started"
-
 	cd $script_home
+
+	echo "waiting for process"
+	while [ -z "$(lsof -i tcp:$target_port | grep LISTEN | awk '{print $2}')" ]; do
+		echo -n "."
+		sleep 0.5
+	done
+	echo "application started!"
 }
 
 function activate_target_instance() {
