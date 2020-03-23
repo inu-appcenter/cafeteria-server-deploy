@@ -89,7 +89,7 @@ function show_result() {
 	fi
 
 	active_pid=$(lsof -i tcp:$target_port | grep LISTEN | awk '{print $2}')
-	if [ -z $active_pid ]; then
+	if [ -z "$active_pid" ]; then
 		echo "no process running on $target_port"
 		exit 1
 	fi
