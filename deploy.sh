@@ -73,7 +73,7 @@ function start_target_instance() {
 	
 	echo "dependencies installed"
 
-	nohup npm start -- --port=$target_port --log-dir=../logs > /dev/null || exit 1 &
+	nohup npm start -- --host=api.inucafeteria.gq --port=$target_port --log-dir=../logs > /dev/null || exit 1 &
 
 	cd $working_dir
 
