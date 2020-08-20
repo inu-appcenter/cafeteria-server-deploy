@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# 서버 앱이 배포되어 실행할 준비가 되었는지 확인합니다.
+# Check if the server app is deployed.
+
+function is_deployed() {
+	if [ "$(is-nginx-set)" == "Y" ] && [ "$(is-envfile-ready)" == "Y" ] && [ "$(is-instance-ready)" == "Y" ]
+	then
+		echo "Y"
+	else
+		echo "N"
+	fi
+}
+
+is_deployed

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Nginx 설정 파일이 준비되어 있는지 확인합니다.
+# Check if nginx config is ready.
+
+function is_nginx_set() {
+	config_prefix='cafeteria_'
+
+	if [ -z "$(ls /etc/nginx/conf.d | grep $config_prefix )" ]
+	then
+		echo "N"
+	else
+		echo "Y"
+	fi
+}
+
+is_nginx_set

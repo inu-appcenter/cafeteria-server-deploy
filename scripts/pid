@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# 현재 작동중인 인스턴스의 pid를 출력합니다. 없으면 아무것도 출력하지 않습니다.
+# Print pid of the currenly activated instance. Empty if none are running.
+
+function print_pid() {
+	target_instance_port=$(enabled-port)
+
+	if [ -z "$target_instance_port" ]; then
+		exit 1
+	fi
+
+	pid=$(lsof -i tcp:$target_instance_port | grep LISTEN | awk '{print $2}')
+
+	echo $pid
+}
+
+print_pid

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# 활성화된 인스턴스의 이름을 가져옵니다.
+# Get the name of the enabled instance.
+
+function print_instance_name() {
+        if [ "$(is-nginx-set)" == "N" ]; then
+                exit 1
+        fi
+
+        config_prefix='cafeteria_'
+        enabled_instance_name=$(ls /etc/nginx/conf.d/$config_prefix*.conf | head -1 | gawk "match(\$0, /.*$config_prefix(.+).conf/, arr) { print arr[1]}")
+
+	echo $enabled_instance_name
+}
+
+print_instance_name

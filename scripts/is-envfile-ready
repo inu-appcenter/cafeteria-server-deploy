@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# 환경변수를 담는 파일이 존재하는지 확인합니다.
+# Check if env file exists.
+
+function envfile_exists() {
+	if [ -f "$(envfile-path)" ]
+	then
+		echo "Y"
+	else
+		echo "N"
+	fi
+}
+
+envfile_exists

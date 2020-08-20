@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# 서버를 시작합니다.
+# Start the server.
+
+function check_if_deployed() {
+	if [ "$(is-deployed)" == "N" ]; then
+		echo "Not deplyed yet!"
+		exit 1
+	fi
+}
+
+function check_if_already_running() {
+	if [ "$(is-running)" == "Y" ]; then
+		echo "Server is already running!"
+		exit 1
+	fi
+}
+
+function start_server() {
+	source $(envfile-path)
+
+	path=$(instance-path)
+	port=$(enabled-port)
+
+        cd $path
+
+ 	nohup npm start -- --host=api.inucafeteria.gq --port=$port --log-dir=../logs > /dev/null || exit 1 &
+
+        echo "Waiting for process"
+        while [ -z "$(lsof -i tcp:$port | grep LISTEN | awk '{print $2}')" ]; do
+                echo -n "."
+                sleep 0.5
+        done
+        echo "Application started."
+}
+
+check_if_deployed && check_if_already_running && start_server

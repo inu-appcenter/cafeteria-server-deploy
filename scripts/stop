@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# 서버를 정지합니다.
+# Stop the server.
+
+function check_if_running() {
+	if [ "$(is-running)" == "N" ]; then
+		echo "Server is not running!"
+		exit 1
+	fi
+}
+
+function stop_server() {
+	sudo kill -9 $(pid) && echo "Server stopped."
+}
+
+check_if_running && stop_server

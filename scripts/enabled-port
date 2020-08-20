@@ -1,0 +1,17 @@
+#!/bin/bash 
+
+# 현재 nginx와 연결된 인스턴스의 포트 번호를 알아냅니다.
+# Get the port number of an instance pointed by nginx config.
+
+function print_nginx_config() {
+	if [ "$(is-nginx-set)" == "N" ]; then
+		exit 1
+	fi
+
+	config_prefix='cafeteria_'
+	enabled_instance_port=$(cat /etc/nginx/conf.d/$config_prefix*.conf | grep -o '127.0.0.1:[0-9]*' | sed 's/127\.0\.0\.1://g')
+
+	echo $enabled_instance_port
+}
+
+print_nginx_config
