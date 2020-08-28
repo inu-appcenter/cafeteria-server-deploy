@@ -10,7 +10,7 @@ function print_instance_port() {
 
   if [ "$enabled" == "20201" ]; then
     echo "20202"
-  elif [ "$enabled" == "20202"]; then
+  elif [ "$enabled" == "20202" ]; then
     echo "20201"
   else
     exit 1

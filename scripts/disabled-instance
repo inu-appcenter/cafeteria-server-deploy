@@ -10,7 +10,7 @@ function print_instance_name() {
 
   if [ "$enabled" == "instanceA" ]; then
     echo "instanceB"
-  elif [ "$enabled" == "instanceB"]; then
+  elif [ "$enabled" == "instanceB" ]; then
     echo "instanceA"
   else
     exit 1
