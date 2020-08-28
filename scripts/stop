@@ -23,7 +23,7 @@ function determine_which_instance_to_stop() {
 }
 
 function check_if_running() {
-	if [ -z "$(pid $target_instance_name)" == "N" ]; then
+	if [ -z "$(pid $target_instance_name)" ]; then
 		echo "$target_instance_name is not running!"
 		exit 1
 	fi
