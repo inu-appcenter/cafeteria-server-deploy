@@ -4,8 +4,9 @@
 
 # 앱 배포를 위한 제반 시설을 설치합니다.
 # 1. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
-# 2. 아파치 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
-# 3. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
+# 2. Nginx 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
+# 3. Systemd 데몬 파일을 /etc/systemd/system에 복사하고 서비스를 활성화합니다.
+# 4. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
 # 4. deploy를 실행합니다.
 
 # 설치 경로는 고정입니다.
@@ -51,15 +52,23 @@ function copy_scripts() {
   echo "Copied scripts."
 }
 
+function append_path() {
+  echo 'PATH="$HOME/.cafeteria/bin:$PATH"' >> ~/.profile &&
+  source ~/.profile &&
+  echo "Registered path."
+}
+
 function copy_nginx_configs() {
   cp $THIS_SCRIPT_PATH/../conf.d/* $CAFETERIA_CONFIGS/ &&
   echo "Copied nginx configs."
 }
 
-function append_path() {
-  echo 'PATH="$HOME/.cafeteria/bin:$PATH"' >> ~/.profile &&
-  source ~/.profile &&
-  echo "Registered path."
+function copy_systemd_script() {
+  sudo cp $THIS_SCRIPT_PATH/../systemd/cafeteria.service /etc/systemd/system/
+  echo "Copied systemd script."
+
+  sudo systemctl daemon-reload
+  sudo systemctl enable cafeteria.service
 }
 
 function create_env_file() {
@@ -95,8 +104,9 @@ is_already_installed &&
 ask &&
 create_directories &&
 copy_scripts &&
-copy_nginx_configs &&
 append_path &&
+copy_nginx_configs &&
+copy_systemd_script &&
 create_env_file &&
 execute_deploy &&
 completed
