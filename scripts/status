@@ -50,14 +50,13 @@ function get_uptime() {
 function get_version() {
 	instance=$1
 
-	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count HEAD || echo -)"
+	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count HEAD 2> /dev/null || echo -)"
 }
 
 function print_table() {
 	add_row "\\" "instanceA" "instanceB"
 	add_row "Port" "20201" "20202"
-	add_row "Path" "$CAFETERIA_INSTANCESinstanceA" "$CAFETERIA_INSTANCESinstanceB"
-	add_row "------------" "------------" "------------"
+	add_row "Path" "$(CAFETERIA_INSTANCES)instanceA" "$(CAFETERIA_INSTANCES)instanceB"
 	add_row "Version" "$(get_version instanceA)" "$(get_version instanceB)"
 	add_row "Proxy" "$(get_connection instanceA)" "$(get_connection instanceB)"
 	add_row "Health" "$(get_health 20201)" "$(get_health 20202)"
