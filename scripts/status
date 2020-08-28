@@ -36,12 +36,23 @@ function get_health() {
 	fi
 }
 
+function get_uptime() {
+	instance=$1
+	pid=$(pid $instance)
+
+	if [ ! -z "$pid" ]; then
+		echo $(ps -o etime= $pid)
+	fi
+}
+
 function print_table() {
 	add_row "\\" "instanceA" "instanceB"
 	add_row "Port" "20201" "20202"
-	add_row "PID" "$(pid instanceA)" "$(pid instanceB)"
+	add_row "-" "-" "-"
 	add_row "Proxy" "$(get_connection instanceA)" "$(get_connection instanceB)"
 	add_row "Health" "$(get_health 20201)" "$(get_health 20202)"
+	add_row "PID" "$(pid instanceA)" "$(pid instanceB)"
+	add_row "Uptime" "$(get_uptime instanceA)" "$(get_uptime instanceB)"
 
 	table ',' "$output"
 }
