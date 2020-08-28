@@ -14,10 +14,10 @@ CAFETERIA_INSTANCES=~/.cafeteria/instances/
 
 function ask() {
   echo "This will install INU Cafeteria applicatoin to this server."
-  echo "Proceed? [Y/n]"
-
   read -p "Proceed? [Y/n] " -n 1 -r
+
   echo    # (optional) move to a new line
+
   if [[ $REPLY =~ ^[Yy]$ ]] || [ "$REPLY" == "" ]
   then
     # Continue
@@ -31,6 +31,7 @@ function is_already_installed() {
   if [ -d "$CAFETERIA_HOME" ]; then
     echo "Cafeteria already installed. Please uninstall and try again."
     exit 1
+  fi
 }
 
 function create_directories() {
