@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 서버가 제대로 돌아가고 있는지 알려줍니다. 결과는 Working 아니면 기타 등등 이유.
+
+CAFETERIA_HOME=~/.cafeteria/
+
+is_good=true
+
+function check_installation() {
+	echo -n "Is server installed? "
+
+	if [ -d "$CAFETERIA_HOME" ]; then
+		echo "Yes."
+	else
+		echo "No."
+		is_good=false
+	fi
+}
+
+function check_nginx() {
+	echo -n "Instance connected to nginx? "
+
+	if [ ! -z "$(enabled-instance)" ]; then
+		echo "Yes."
+	else
+		echo "No."
+		is_good=false
+	fi
+}
+
+function check_instance() {
+	echo -n "Instance running? "
+
+	if [ ! -z "$(pid $(enabled-instance))" ]
+		echo "Yes"
+	else
+		echo "No."
+		is_good=false
+	fi
+}
+
+function summary() {
+	echo -n "Service status: "
+
+	if [ is_good ]; then
+		echo "Good."
+	else
+		echo "Bad."
+}
+
+check_installation &&
+check_nginx &&
+check_instance &&
+summary

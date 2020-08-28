@@ -1,18 +1,31 @@
 #!/bin/bash
 
-# 현재 작동중인 인스턴스의 pid를 출력합니다. 없으면 아무것도 출력하지 않습니다.
-# Print pid of the currenly activated instance. Empty if none are running.
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 지정된(필수) 인스턴스의 pid를 출력합니다. 없으면 아무것도 출력하지 않습니다.
+
+function usage() {
+  echo "Usage: pid [a|b|A|B|instanceA|instanceB]"
+  exit 1
+}
+
+function determine_which_instance_to_check_pid() {
+  if [[ "$1" =~ ^(a|A|instanceA)$ ]]; then
+    target_instance_port="20201"
+  elif [[ "$1" =~ ^(b|B|instanceB)$ ]]; then
+    target_instance_port="20202"
+  else
+    usage
+  fi
+}
 
 function print_pid() {
-	target_instance_port=$(enabled-port)
-
 	if [ -z "$target_instance_port" ]; then
 		exit 1
 	fi
 
-	pid=$(lsof -i tcp:$target_instance_port | grep LISTEN | awk '{print $2}')
-
-	echo $pid
+	echo $(lsof -i tcp:$target_instance_port | grep LISTEN | awk '{print $2}')
 }
 
+determine_which_instance_to_check_pid $@ &&
 print_pid

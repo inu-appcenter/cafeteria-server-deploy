@@ -36,7 +36,7 @@ function ask() {
   echo "Currently connected: $in_service"
   echo "Instance to connect: $target_instance_name"
 
-  if [ "$in_service" != "$target_instance_name" ] && [ -z "$(lsof -i tcp:$target_instance_port | grep LISTEN | awk '{print $2}')" ]; then
+  if [ "$in_service" != "$target_instance_name" ] && [ -z "$(pid $target_instance_name)" ]; then
     echo "** Danger: The target instance is not running. This will stop the service. **"
   fi
 
