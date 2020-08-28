@@ -50,7 +50,7 @@ function get_uptime() {
 function get_version() {
 	instance=$1
 
-	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count HEAD 2> /dev/null || echo -)"
+	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count HEAD 2> /dev/null)"
 }
 
 function print_table() {
