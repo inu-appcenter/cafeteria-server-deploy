@@ -39,6 +39,11 @@ function ask() {
     echo "** Danger: This action will stop the instance in service. **"
   fi
 
+	if [ "$2" == "-f" ]; then
+    echo "Force OK."
+    return
+  fi
+	
   read -p "Proceed? [y/N] " -n 1 -r
 
   echo    # (optional) move to a new line
@@ -59,5 +64,5 @@ function stop_server() {
 
 determine_which_instance_to_stop $@ &&
 check_if_running &&
-ask &&
+ask $@ &&
 stop_server

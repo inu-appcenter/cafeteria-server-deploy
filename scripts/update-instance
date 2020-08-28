@@ -43,6 +43,11 @@ function ask() {
     echo "** Danger: This update will stop the instance in service. **"
   fi
 
+  if [ "$2" == "-f" ]; then
+    echo "Force OK."
+    return
+  fi
+
   read -p "Proceed? [y/N] " -n 1 -r
 
   echo    # (optional) move to a new line
@@ -57,7 +62,7 @@ function ask() {
 }
 
 function kill_target_instance() {
-  stop-instance $target_instance_name || true &&
+  stop-instance $target_instance_name $2 || true &&
   echo "Killed old version of app running on $target_instance_name"
 }
 
@@ -78,7 +83,7 @@ function completed() {
 }
 
 determine_which_instance_to_update $@ &&
-ask &&
-kill_target_instance &&
+ask $@ &&
+kill_target_instance $@ &&
 download_and_install_app &&
 completed

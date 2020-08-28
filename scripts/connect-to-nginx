@@ -40,6 +40,11 @@ function ask() {
     echo "** Danger: The target instance is not running. This will stop the service. **"
   fi
 
+  if [ "$2" == "-f" ]; then
+    echo "Force OK."
+    return
+  fi
+
   read -p "Proceed? [y/N] " -n 1 -r
 
   echo    # (optional) move to a new line
@@ -67,6 +72,6 @@ function completed() {
 }
 
 determine_which_instance_to_connect $@ &&
-ask &&
+ask $@ &&
 swap_nginx_config_and_reload &&
 completed

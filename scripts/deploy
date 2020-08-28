@@ -40,7 +40,7 @@ function completed() {
 
 check_if_not_installed &&
 determine_which_instance_to_use &&
-update-instance $target_instance_name &&
+update-instance $target_instance_name -f && # no ask.
 start-instance $target_instance &&
-connect-to-nginx $target_instance &&
+connect-to-nginx $target_instance -f && # no ask.
 completed
