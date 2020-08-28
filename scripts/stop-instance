@@ -2,7 +2,7 @@
 
 # Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
 
-# 애플리케이션을 정지합니다.
+# 인스턴스를 정지합니다.
 
 function determine_which_instance_to_stop() {
   if [ $# -eq 0 ]; then
@@ -43,7 +43,7 @@ function ask() {
     echo "Force OK."
     return
   fi
-	
+
   read -p "Proceed? [y/N] " -n 1 -r
 
   echo    # (optional) move to a new line

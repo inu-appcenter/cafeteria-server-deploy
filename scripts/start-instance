@@ -2,7 +2,7 @@
 
 # Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
 
-# 애플리케이션을 시작합니다.
+# 인스턴스를 시작합니다.
 
 CAFETERIA_INSTANCES=~/.cafeteria/instances/
 
@@ -43,9 +43,9 @@ function check_if_source_exists() {
 }
 
 function start() {
-	source $ENVFILE_PATH
+	source $ENVFILE_PATH &&
 
-	cd $CAFETERIA_INSTANCES/$target_instance_name
+	cd $CAFETERIA_INSTANCES/$target_instance_name &&
 
 	nohup npm start -- --host=$HOST --port=$target_instance_port --log-dir=../logs > /dev/null || exit 1 &
 }
