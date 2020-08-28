@@ -71,7 +71,7 @@ function download_and_install_app() {
   echo "Installed dependencies."
 }
 
-function done() {
+function completed() {
   echo "$target_instance_name successfully updated."
 }
 
@@ -79,4 +79,4 @@ determine_which_instance_to_update &&
 ask &&
 kill_target_instance &&
 download_and_install_app &&
-done
+completed
