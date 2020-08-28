@@ -25,6 +25,9 @@ function determine_which_instance_to_connect() {
   else
     usage
   fi
+
+  : ${target_instance_name:="instanceA"}
+  : ${target_instance_port:="20201"}
 }
 
 function ask() {
