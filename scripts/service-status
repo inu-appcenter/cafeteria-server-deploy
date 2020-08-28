@@ -48,6 +48,8 @@ function summary() {
 		echo "Good."
 	else
 		echo "Bad."
+		echo "\n** IMPORTANT: SERVICE IS DOWN **"
+		is_good=false
 	fi
 }
 
