@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# 현재 활성화된 인스턴스의 전체 경로를 구합니다.
-# Get full path of the enabled instance.
-
-echo "$(deploy-path)/$(enabled-instance)"

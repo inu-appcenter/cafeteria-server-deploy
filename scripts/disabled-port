@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 현재 nginx와 연결되지 않은 포트 번호를 알아냅니다.
+# 예시: 20202
+
+function print_instance_port() {
+  enabled=$(enabled-port)
+
+  if [ "$enabled" == "20201" ]; then
+    echo "20202"
+  elif [ "$enabled" == "20202"]; then
+    echo "20201"
+  else
+    exit 1
+  fi
+}
+
+print_instance_port

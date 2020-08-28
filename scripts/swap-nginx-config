@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# 트래픽이 지정된 인스턴스로 향하도록 Nginx 설정을 변경합니다.
+
+CAFETERIA_CONFIGS
+
+function swap_nginx_config_and_reload() {
+  sudo rm -f /etc/nginx/conf.d/cafeteria*.conf &&
+  sudo cp $CAFETERIA_CONFIGS/cafeteria_$NEW_INSTANCE.conf /etc/nginx/conf.d/ &&
+  sudo systemctl reload nginx &&
+  echo "Nginx reloaded."
+}

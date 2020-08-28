@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 비활성화된 인스턴스의 이름을 가져옵니다. 없을 때에는 아무 것도 출력하지 않습니다.
+# 예시: instanceB
+
+function print_instance_name() {
+  enabled=$(enabled-instance)
+
+  if [ "$enabled" == "instanceA" ]; then
+    echo "instanceB"
+  elif [ "$enabled" == "instanceB"]; then
+    echo "instanceA"
+  else
+    exit 1
+  fi
+}
+
+print_instance_name

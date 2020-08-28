@@ -1,9 +1,11 @@
-#!/bin/bash 
+#!/bin/bash
+
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
 
 # 현재 nginx와 연결된 인스턴스의 포트 번호를 알아냅니다.
-# Get the port number of an instance pointed by nginx config.
+# 예시: 20201
 
-function print_nginx_config() {
+function print_instance_port() {
 	if [ "$(is-nginx-set)" == "N" ]; then
 		exit 1
 	fi
@@ -14,4 +16,4 @@ function print_nginx_config() {
 	echo $enabled_instance_port
 }
 
-print_nginx_config
+print_instance_port

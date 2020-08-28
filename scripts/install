@@ -4,13 +4,24 @@
 
 # 앱 배포를 위한 제반 시설을 설치합니다.
 # 1. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
-# 2. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
-# 3. update를 실행합니다.
+# 2. 아파치 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
+# 3. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
+# 4. deploy-app을 실행합니다.
 
 # 설치 경로는 고정입니다.
 CAFETERIA_HOME=~/.cafeteria/
 CAFETERIA_BIN=~/.cafeteria/bin/
+CAFETERIA_CONFIGS=~/.cafeteria/conf.d/
 CAFETERIA_INSTANCES=~/.cafeteria/instances/
+
+THIS_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
+function is_already_installed() {
+  if [ -d "$CAFETERIA_HOME" ]; then
+    echo "Cafeteria already installed. Please uninstall and try again."
+    exit 1
+  fi
+}
 
 function ask() {
   echo "This will install INU Cafeteria applicatoin to this server."
@@ -27,16 +38,10 @@ function ask() {
   fi
 }
 
-function is_already_installed() {
-  if [ -d "$CAFETERIA_HOME" ]; then
-    echo "Cafeteria already installed. Please uninstall and try again."
-    exit 1
-  fi
-}
-
 function create_directories() {
   mkdir -p $CAFETERIA_HOME &&
   mkdir -p $CAFETERIA_BIN &&
+  mkdir -p $CAFETERIA_CONFIGS &&
   mkdir -p $CAFETERIA_INSTANCES &&
   echo "Created install directories."
 }
@@ -47,6 +52,11 @@ function copy_scripts() {
 
   cp $THIS_SCRIPT_PATH/* $CAFETERIA_BIN/ &&
   echo "Copied scripts."
+}
+
+function copy_nginx_configs() {
+  cp $THIS_SCRIPT_PATH/../conf.d/* $CAFETERIA_CONFIGS/ &&
+  echo "Copied nginx configs."
 }
 
 function append_path() {
@@ -73,8 +83,22 @@ function create_env_file() {
   vi $FILE
 }
 
-function execute_update() {
-  update
+function execute_deploy_app() {
+  echo "Deploying app..."
+  deploy-app
+  echo "Deployed app."
 }
 
-ask && is_already_installed && create_directories && copy_scripts && append_path && create_env_file && execute_update
+function done() {
+  echo "Installation & deployment successfully completed."
+  echo "Please type 'source ~/.profile' in your shell to use server commands."
+}
+
+is_already_installed &&
+ask &&
+create_directories &&
+copy_scripts &&
+append_path &&
+create_env_file &&
+execute_download_app &&
+done
