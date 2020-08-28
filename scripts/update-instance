@@ -75,7 +75,7 @@ function completed() {
   echo "$target_instance_name successfully updated."
 }
 
-determine_which_instance_to_update &&
+determine_which_instance_to_update $@ &&
 ask &&
 kill_target_instance &&
 download_and_install_app &&
