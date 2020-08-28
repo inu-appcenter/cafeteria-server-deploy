@@ -7,10 +7,11 @@
 output=""
 
 function add_row() {
-	: ${1:="-"}
-	: ${2:="-"}
-	: ${3:="-"}
-	output="$output\n$1, $2, $3"
+	item=${1:-"-"}
+	val1=${2:-"-"}
+	val2=${3:-"-"}
+
+	output="$output\n$item, $val1, $val2"
 }
 
 function get_connection() {
