@@ -43,4 +43,5 @@ determine_which_instance_to_use &&
 update-instance $target_instance_name -f && # no ask.
 start-instance $target_instance_name &&
 connect-to-nginx $target_instance_name -f && # no ask.
-completed
+completed ||
+echo "Deploy failed."
