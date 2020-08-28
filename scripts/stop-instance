@@ -24,7 +24,7 @@ function determine_which_instance_to_stop() {
 
 function check_if_running() {
 	if [ -z "$(pid $target_instance_name)" ]; then
-		echo "$target_instance_name is not running!"
+		echo "$target_instance_name is not running."
 		exit 1
 	fi
 }
@@ -36,7 +36,7 @@ function ask() {
   echo "Target instance to stop: $target_instance_name"
 
   if [ "$in_service" == "$target_instance_name" ]; then
-    echo "** Danger: This update will stop the instance in service. **"
+    echo "** Danger: This action will stop the instance in service. **"
   fi
 
   read -p "Proceed? [y/N] " -n 1 -r
