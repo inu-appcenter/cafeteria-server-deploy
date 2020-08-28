@@ -7,7 +7,7 @@
 
 function print_instance_name() {
   config_prefix=''
-  enabled_instance_name=$(ls /etc/nginx/conf.d/cafeteria_*.conf 2> /dev/null | head -1 | gawk "match(\$0, /.*$config_prefix(.+).conf/, arr) { print arr[1]}")
+  enabled_instance_name=$(ls /etc/nginx/conf.d/cafeteria_*.conf 2> /dev/null | head -1 | gawk "match(\$0, /.*cafeteria_(.+).conf/, arr) { print arr[1]}")
 
   echo $enabled_instance_name
 }
