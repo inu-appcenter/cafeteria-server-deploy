@@ -6,7 +6,7 @@
 # 1. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
 # 2. 아파치 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
 # 3. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
-# 4. deploy-app을 실행합니다.
+# 4. deploy를 실행합니다.
 
 # 설치 경로는 고정입니다.
 CAFETERIA_HOME=~/.cafeteria/
@@ -47,9 +47,6 @@ function create_directories() {
 }
 
 function copy_scripts() {
-  # https://stackoverflow.com/a/4774063 참고
-  THIS_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-
   cp $THIS_SCRIPT_PATH/* $CAFETERIA_BIN/ &&
   echo "Copied scripts."
 }
@@ -66,30 +63,30 @@ function append_path() {
 }
 
 function create_env_file() {
-  FILE=$CAFETERIA_HOME/exports.sh
+  file=$CAFETERIA_HOME/exports.sh
 
-  echo '#!/bin/bash' >> $FILE &&
-  echo '' >> $FILE &&
-  echo '# Please fill the blanks. No idea? call 010-2922-2661.' >> $FILE &&
-  echo '' >> $FILE &&
-  echo 'export NODE_ENV=' >> $FILE &&
-  echo 'export JWT_SECRET_KEY=' >> $FILE &&
-  echo 'export DB_USERNAME=' >> $FILE &&
-  echo 'export DB_PASSWORD=' >> $FILE &&
-  echo 'export LOGIN_KEY=' >> $FILE &&
-  echo 'export TEST_ID=' >> $FILE &&
-  echo 'export TEST_PW=' >> $FILE &&
+  echo '#!/bin/bash' >> $file &&
+  echo '' >> $file &&
+  echo '# Please fill the blanks. No idea? call 010-2922-2661.' >> $file &&
+  echo '' >> $file &&
+  echo 'export NODE_ENV=' >> $file &&
+  echo 'export JWT_SECRET_KEY=' >> $file &&
+  echo 'export DB_USERNAME=' >> $file &&
+  echo 'export DB_PASSWORD=' >> $file &&
+  echo 'export LOGIN_KEY=' >> $file &&
+  echo 'export TEST_ID=' >> $file &&
+  echo 'export TEST_PW=' >> $file &&
   echo "Created env file." &&
-  vi $FILE
+  vi $file
 }
 
-function execute_deploy_app() {
+function execute_deploy() {
   echo "Deploying app..."
-  deploy-app
+  deploy
   echo "Deployed app."
 }
 
-function done() {
+function completed() {
   echo "Installation & deployment successfully completed."
   echo "Please type 'source ~/.profile' in your shell to use server commands."
 }
@@ -100,5 +97,5 @@ create_directories &&
 copy_scripts &&
 append_path &&
 create_env_file &&
-execute_download_app &&
-done
+execute_deploy &&
+completed
