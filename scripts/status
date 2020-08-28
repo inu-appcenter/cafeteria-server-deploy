@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 서버가 제대로 돌아가고 있는지 알려줍니다. 결과는 Working 아니면 기타 등등 이유.
+
+output=""
+
+function add_row() {
+	: ${1:="-"}
+	: ${2:="-"}
+	: ${3:="-"}
+	output="$output\n$1, $2, $3"
+}
+
+function get_connection() {
+	instance=$1
+	enabled_instance=$(enabled-instance)
+
+	if [ "$instance" == "$enabled_instance" ]; then
+		echo "Connected"
+	else
+		echo "Not connected"
+}
+
+function get_health() {
+	port=$1
+	response_code=$(curl -s -o /dev/null -w "%{http_code}" "127.0.0.1:$port/documentation")
+
+	if [ "$response_code" == "200" ]; then
+		echo "Healthy"
+	else
+		echo "Unhealthy"
+}
+
+function print_table() {
+	add_row "\\" "instanceA" "instanceB"
+	add_row "Port" "20201" "20202"
+	add_row "PID" "$(pid instanceA)" "$(pid instanceB)"
+	add_row "Proxy" "$(get_connection instanceA)" "$(get_connection instanceB)"
+	add_row "Health" "$(get_health 20201)" "$(get_health 20202)"
+}
+
+print_table
