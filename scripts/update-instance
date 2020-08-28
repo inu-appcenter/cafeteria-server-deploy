@@ -36,7 +36,7 @@ function determine_which_instance_to_update() {
 function ask() {
   in_service=$(enabled-instance)
 
-  echo "Instance in service: $in_service"
+  echo "Instance in service: ${in_service:-"-"}"
   echo "Target instance to update: $target_instance_name"
 
   if [ "$in_service" == "$target_instance_name" ]; then
