@@ -48,6 +48,7 @@ function summary() {
 		echo "Good."
 	else
 		echo "Bad."
+	fi
 }
 
 check_installation &&
