@@ -1,17 +1,64 @@
 #!/bin/bash
 
-# 서버를 정지합니다.
-# Stop the server.
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 애플리케이션을 정지합니다.
+
+function determine_which_instance_to_stop() {
+  if [ $# -eq 0 ]; then
+    target_instance_name=$(enabled-instance)
+    target_instance_port=$(enabled-port)
+  elif [[ "$1" =~ ^(a|A|instanceA)$ ]]; then
+    target_instance_name="instanceA"
+    target_instance_port="20201"
+  elif [[ "$1" =~ ^(b|B|instanceB)$ ]]; then
+    target_instance_name="instanceB"
+    target_instance_port="20202"
+  else
+    usage
+  fi
+
+  : ${target_instance_name:="instanceA"}
+  : ${target_instance_port:="20201"}
+}
 
 function check_if_running() {
-	if [ "$(is-running)" == "N" ]; then
-		echo "Server is not running!"
+	if [ -z "$(pid $target_instance_name)" == "N" ]; then
+		echo "$target_instance_name is not running!"
 		exit 1
 	fi
 }
 
-function stop_server() {
-	sudo kill -9 $(pid) && echo "Server stopped."
+
+function ask() {
+  in_service=$(enabled-instance)
+
+  echo "Instance in service: $in_service"
+  echo "Target instance to stop: $target_instance_name"
+
+  if [ "$in_service" == "$target_instance_name" ]; then
+    echo "** Danger: This update will stop the instance in service. **"
+  fi
+
+  read -p "Proceed? [y/N] " -n 1 -r
+
+  echo    # (optional) move to a new line
+
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    echo "OK."
+  else
+    echo "Cancel."
+    exit 1
+  fi
 }
 
-check_if_running && stop_server
+function stop_server() {
+	fuser -n tcp -k $target_instance_port &&
+	echo "$target_instance_name stopped."
+}
+
+determine_which_instance_to_stop &&
+check_if_running &&
+ask &&
+stop_server

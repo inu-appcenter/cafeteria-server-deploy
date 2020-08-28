@@ -2,7 +2,7 @@
 
 # Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
 
-# 서버가 제대로 돌아가고 있는지 알려줍니다. 결과는 Working 아니면 기타 등등 이유.
+# 서비스 상태를 표시합니다.
 
 CAFETERIA_INSTANCES=~/.cafeteria/instances/
 
@@ -16,7 +16,13 @@ function add_row() {
 	output="$output\n$item, $val1, $val2"
 }
 
-function get_connection() {
+function get_version() {
+	instance=$1
+
+	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count HEAD 2> /dev/null)"
+}
+
+function get_proxy() {
 	instance=$1
 	enabled_instance=$(enabled-instance)
 
@@ -47,18 +53,12 @@ function get_uptime() {
 	fi
 }
 
-function get_version() {
-	instance=$1
-
-	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count HEAD 2> /dev/null)"
-}
-
 function print_table() {
 	add_row "\\" "instanceA" "instanceB"
 	add_row "Port" "20201" "20202"
 	add_row "Path" "${CAFETERIA_INSTANCES}instanceA" "${CAFETERIA_INSTANCES}instanceB"
 	add_row "Version" "$(get_version instanceA)" "$(get_version instanceB)"
-	add_row "Proxy" "$(get_connection instanceA)" "$(get_connection instanceB)"
+	add_row "Proxy" "$(get_proxy instanceA)" "$(get_proxy instanceB)"
 	add_row "Health" "$(get_health 20201)" "$(get_health 20202)"
 	add_row "PID" "$(pid instanceA)" "$(pid instanceB)"
 	add_row "Uptime" "$(get_uptime instanceA)" "$(get_uptime instanceB)"

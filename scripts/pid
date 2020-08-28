@@ -20,10 +20,6 @@ function determine_which_instance_to_check_pid() {
 }
 
 function print_pid() {
-	if [ -z "$target_instance_port" ]; then
-		exit 1
-	fi
-
 	echo $(lsof -i tcp:$target_instance_port | grep LISTEN | awk '{print $2}')
 }
 

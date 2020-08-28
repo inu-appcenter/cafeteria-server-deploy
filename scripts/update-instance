@@ -57,8 +57,7 @@ function ask() {
 }
 
 function kill_target_instance() {
-  fuser -n tcp -k $target_instance_port
-
+  fuser -n tcp -k $target_instance_port &&
   echo "Killed old version of app running on $target_instance_name"
 }
 
