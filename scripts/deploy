@@ -6,8 +6,7 @@
 
 REPO=https://github.com/inu-appcenter/cafeteria-server.git
 
-CAFETERIA_CONFIGS=~/.cafeteria/conf.d/
-CAFETERIA_INSTANCES=~/.cafeteria/instances/
+CAFETERIA_HOME=~/.cafeteria/
 
 function check_if_not_installed() {
   if [ ! -d "$CAFETERIA_HOME" ]; then
