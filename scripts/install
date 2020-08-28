@@ -20,7 +20,7 @@ function ask() {
 
   if [[ $REPLY =~ ^[Yy]$ ]] || [ "$REPLY" == "" ]
   then
-    # Continue
+    echo "OK."
   else
     echo "Exit."
     exit 1
