@@ -45,9 +45,9 @@ function check_if_source_exists() {
 function start() {
 	source $ENVFILE_PATH
 
-  cd $CAFETERIA_INSTANCES/$target_instance_name
+	cd $CAFETERIA_INSTANCES/$target_instance_name
 
- 	nohup npm start -- --host=$HOST --port=$target_instance_port --log-dir=../logs > /dev/null || exit 1 &
+	nohup npm start -- --host=$HOST --port=$target_instance_port --log-dir=../logs > /dev/null || exit 1 &
 }
 
 function wait() {
