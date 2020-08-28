@@ -33,7 +33,7 @@ function check_nginx() {
 function check_instance() {
 	echo -n "Instance running? "
 
-	if [ ! -z "$(pid $(enabled-instance))" ]
+	if [ ! -z "$(pid $(enabled-instance))" ]; then
 		echo "Yes"
 	else
 		echo "No."
