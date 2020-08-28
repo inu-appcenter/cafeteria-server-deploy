@@ -22,7 +22,7 @@ function ask() {
   then
     echo "OK."
   else
-    echo "Exit."
+    echo "Cancel."
     exit 1
   fi
 }
@@ -77,6 +77,4 @@ function execute_update() {
   update
 }
 
-ask
-echo YEAH
-#&& is_already_installed && create_directories && copy_scripts && append_path && create_env_file && execute_update
+ask && is_already_installed && create_directories && copy_scripts && append_path && create_env_file && execute_update
