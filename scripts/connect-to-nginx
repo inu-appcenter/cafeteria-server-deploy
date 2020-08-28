@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 지정된 인스턴스를 nginx와 연결합니다.
+# 지정되지 않을 경우, 현재 비활성화된 인스턴스를 nginx와 연결합니다(swap).
+
+CAFETERIA_CONFIGS=~/.cafeteria/conf.d/
+
+function usage() {
+  echo "Usage: connect-to-nginx [A|B|instanceA|instanceB](optional)"
+  exit 1
+}
+
+function determine_which_instance_to_connect() {
+  if [ $# -eq 0 ]; then
+    target_instance_name=$(disabled-instance)
+    target_instance_port=$(disabled-port)
+  elif [ "$1" == "A" ] || [ "$1" == "instanceA" ]; then
+    target_instance_name="instanceA"
+    target_instance_port="20201"
+  elif [ "$1" == "B" ] || [ "$1" == "instanceB" ]; then
+    target_instance_name="instanceB"
+    target_instance_port="20202"
+  else
+    usage
+  fi
+}
+
+function ask() {
+  in_service=$(enabled-instance)
+
+  echo "Currently connected: $in_service"
+  echo "Instance to connect: $target_instance_name"
+
+  if [ "$in_service" != "$target_instance_name" ] && [ -z "$(lsof -i tcp:$target_instance_port | grep LISTEN | awk '{print $2}')" ]; then
+    echo "** Danger: The target instance is not running. This will stop the service. **"
+  fi
+
+  read -p "Proceed? [y/N] " -n 1 -r
+
+  echo    # (optional) move to a new line
+
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    echo "OK."
+  else
+    echo "Cancel."
+    exit 1
+  fi
+}
+
+function swap_nginx_config_and_reload() {
+  sudo rm -f /etc/nginx/conf.d/cafeteria*.conf &&
+  sudo cp $CAFETERIA_CONFIGS/cafeteria_$target_instance_name.conf /etc/nginx/conf.d/ &&
+  echo "Configuration changed." &&
+
+  sudo systemctl reload nginx &&
+  echo "Nginx reloaded."
+}
+
+function completed() {
+  echo "$target_instance_name is now connected to nginx."
+}
+
+determine_which_instance_to_connect $@ &&
+ask &&
+swap_nginx_config_and_reload &&
+completed

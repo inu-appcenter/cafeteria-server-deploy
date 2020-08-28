@@ -37,7 +37,7 @@ function ask() {
   echo "Target instance to update: $target_instance_name"
 
   if [ "$in_service" == "$target_instance_name" ]; then
-    echo "** Danger: this update will stop the instance in service. **"
+    echo "** Danger: This update will stop the instance in service. **"
   fi
 
   read -p "Proceed? [y/N] " -n 1 -r
