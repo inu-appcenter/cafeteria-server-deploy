@@ -6,12 +6,8 @@
 # 예시: instanceA
 
 function print_instance_name() {
-  if [ "$(is-nginx-set)" == "N" ]; then
-    exit 1
-  fi
-
-  config_prefix='cafeteria_'
-  enabled_instance_name=$(ls /etc/nginx/conf.d/$config_prefix*.conf | head -1 | gawk "match(\$0, /.*$config_prefix(.+).conf/, arr) { print arr[1]}")
+  config_prefix=''
+  enabled_instance_name=$(ls /etc/nginx/conf.d/cafeteria_*.conf 2> /dev/null | head -1 | gawk "match(\$0, /.*$config_prefix(.+).conf/, arr) { print arr[1]}")
 
   echo $enabled_instance_name
 }

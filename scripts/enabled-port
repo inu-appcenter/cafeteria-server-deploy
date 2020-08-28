@@ -6,12 +6,7 @@
 # 예시: 20201
 
 function print_instance_port() {
-	if [ "$(is-nginx-set)" == "N" ]; then
-		exit 1
-	fi
-
-	config_prefix='cafeteria_'
-	enabled_instance_port=$(cat /etc/nginx/conf.d/$config_prefix*.conf | grep -o '127.0.0.1:[0-9]*' | sed 's/127\.0\.0\.1://g')
+	enabled_instance_port=$(cat /etc/nginx/conf.d/cafeteria_*.conf 2> /dev/null | grep -o '127.0.0.1:[0-9]*' | sed 's/127\.0\.0\.1://g')
 
 	echo $enabled_instance_port
 }
