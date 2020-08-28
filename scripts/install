@@ -95,6 +95,7 @@ is_already_installed &&
 ask &&
 create_directories &&
 copy_scripts &&
+copy_nginx_configs &&
 append_path &&
 create_env_file &&
 execute_deploy &&
