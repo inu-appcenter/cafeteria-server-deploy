@@ -56,7 +56,7 @@ function get_version() {
 function print_table() {
 	add_row "\\" "instanceA" "instanceB"
 	add_row "Port" "20201" "20202"
-	add_row "Path" "$(CAFETERIA_INSTANCES)instanceA" "$(CAFETERIA_INSTANCES)instanceB"
+	add_row "Path" "${CAFETERIA_INSTANCES}instanceA" "${CAFETERIA_INSTANCES}instanceB"
 	add_row "Version" "$(get_version instanceA)" "$(get_version instanceB)"
 	add_row "Proxy" "$(get_connection instanceA)" "$(get_connection instanceB)"
 	add_row "Health" "$(get_health 20201)" "$(get_health 20202)"
