@@ -44,7 +44,7 @@ function check_instance() {
 function summary() {
 	echo -n "Service status: "
 
-	if [ $is_good ]; then
+	if [ $is_good == true ]; then
 		echo "Good."
 	else
 		echo "Bad."
