@@ -25,7 +25,7 @@ function start_server() {
 
         cd $path
 
- 	nohup npm start -- --host=api.inucafeteria.gq --port=$port --log-dir=../logs > /dev/null || exit 1 &
+ 	nohup npm start -- --host=api.inu-cafeteria.app --port=$port --log-dir=../logs > /dev/null || exit 1 &
 
         echo "Waiting for process"
         while [ -z "$(lsof -i tcp:$port | grep LISTEN | awk '{print $2}')" ]; do

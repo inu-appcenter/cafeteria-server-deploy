@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
+
+# 앱 배포를 위한 제반 시설을 설치합니다.
+# 1. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
+# 2. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
+# 3. update를 실행합니다.
+
+# 설치 경로는 고정입니다.
+CAFETERIA_HOME=~/.cafeteria/
+CAFETERIA_BIN=~/.cafeteria/bin/
+CAFETERIA_INSTANCES=~/.cafeteria/instances/
+
+function ask() {
+  echo "This will install INU Cafeteria applicatoin to this server."
+  echo "Proceed? [Y/n]"
+
+  read -p "Proceed? [Y/n] " -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ $REPLY =~ ^[Yy]$ ]] || [ "$REPLY" == "" ]
+  then
+    # Continue
+  else
+    echo "Exit."
+    exit 1
+  fi
+}
+
+function is_already_installed() {
+  if [ -d "$CAFETERIA_HOME" ]; then
+    echo "Cafeteria already installed. Please uninstall and try again."
+    exit 1
+}
+
+function create_directories() {
+  mkdir -p $CAFETERIA_HOME &&
+  mkdir -p $CAFETERIA_BIN &&
+  mkdir -p $CAFETERIA_INSTANCES &&
+  echo "Created install directories."
+}
+
+function copy_scripts() {
+  # https://stackoverflow.com/a/4774063 참고
+  THIS_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
+  cp $THIS_SCRIPT_PATH/* $CAFETERIA_BIN/ &&
+  echo "Copied scripts."
+}
+
+function append_path() {
+  echo 'PATH="$HOME/.cafeteria/bin:$PATH"' >> ~/.profile &&
+  source ~/.profile &&
+  echo "Registered path."
+}
+
+function create_env_file() {
+  FILE=$CAFETERIA_HOME/exports.sh
+
+  echo '#!/bin/bash' >> $FILE &&
+  echo '' >> $FILE &&
+  echo '# Please fill the blanks. No idea? call 010-2922-2661.' >> $FILE &&
+  echo '' >> $FILE &&
+  echo 'export NODE_ENV=' >> $FILE &&
+  echo 'export JWT_SECRET_KEY=' >> $FILE &&
+  echo 'export DB_USERNAME=' >> $FILE &&
+  echo 'export DB_PASSWORD=' >> $FILE &&
+  echo 'export LOGIN_KEY=' >> $FILE &&
+  echo 'export TEST_ID=' >> $FILE &&
+  echo 'export TEST_PW=' >> $FILE &&
+  echo "Created env file." &&
+  vi $FILE
+}
+
+function execute_update() {
+  update
+}
+
+ask
+echo YEAH
+#&& is_already_installed && create_directories && copy_scripts && append_path && create_env_file && execute_update
