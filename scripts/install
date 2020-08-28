@@ -81,13 +81,13 @@ function create_env_file() {
 }
 
 function execute_deploy() {
-  echo "Deploying app..."
-  deploy
+  echo "Deploying app..." &&
+  deploy &&
   echo "Deployed app."
 }
 
 function completed() {
-  echo "Installation & deployment successfully completed."
+  echo "Installation & deployment successfully completed." &&
   echo "Please type 'source ~/.profile' in your shell to use server commands."
 }
 
