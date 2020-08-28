@@ -36,7 +36,7 @@ function ask() {
   echo "Instance in service: $in_service"
   echo "Target instance to update: $target_instance_name"
 
-  if [ "$in_service" == "$target_instance_name"]; then
+  if [ "$in_service" == "$target_instance_name" ]; then
     echo "** Danger: this update will stop the instance in service. **"
   fi
 
