@@ -29,7 +29,6 @@ function check_if_running() {
 	fi
 }
 
-
 function ask() {
   in_service=$(enabled-instance)
 
@@ -58,7 +57,7 @@ function stop_server() {
 	echo "$target_instance_name stopped."
 }
 
-determine_which_instance_to_stop &&
+determine_which_instance_to_stop $@ &&
 check_if_running &&
 ask &&
 stop_server
