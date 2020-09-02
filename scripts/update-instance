@@ -70,11 +70,13 @@ function download_and_install_app() {
   rm -rf $CAFETERIA_INSTANCES/$target_instance_name &&
   echo "Purged target instance directory." &&
 
-  git clone $REPO $CAFETERIA_INSTANCES/$target_instance_name > /dev/null &&
+  echo "Fetching..."
+  git clone $REPO $CAFETERIA_INSTANCES/$target_instance_name --quiet &&
   echo "Downloaded app." &&
 
+  echo "Installing dependencies...(might take long)"
   cd $CAFETERIA_INSTANCES/$target_instance_name &&
-  npm install > /dev/null &&
+  npm install --silent --no-progress &&
   echo "Installed dependencies."
 }
 

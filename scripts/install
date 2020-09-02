@@ -19,8 +19,20 @@ THIS_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 function is_already_installed() {
   if [ -d "$CAFETERIA_HOME" ]; then
-    echo "Cafeteria already installed. Please uninstall and try again."
-    exit 1
+    echo "Cafeteria already installed."
+    read -p "Update scripts only? [Y/n]" -n 1 -r
+
+    echo    # (optional) move to a new line
+
+    if [[ $REPLY =~ ^[Yy]$ ]] || [ "$REPLY" == "" ]
+    then
+      echo "OK."
+      copy_scripts
+      exit 0
+    else
+      echo "Cancel."
+      exit 1
+    fi
   fi
 }
 
@@ -54,7 +66,7 @@ function copy_scripts() {
 
 function append_path() {
   echo 'PATH="$HOME/.cafeteria/bin:$PATH"' >> ~/.profile &&
-  
+
   source ~/.profile &&
   echo "Registered path."
 }
