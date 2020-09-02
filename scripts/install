@@ -54,7 +54,6 @@ function copy_scripts() {
 
 function append_path() {
   echo 'PATH="$HOME/.cafeteria/bin:$PATH"' >> ~/.profile &&
-  echo 'status' >> ~/.profile &&
   
   source ~/.profile &&
   echo "Registered path."
