@@ -82,6 +82,7 @@ MySQL을 설치할 때에 사용한 관리자 비밀번호를 입력합니다.
 
 ### 데이터베이스 생성
 
+다음 명령어를 사용하여 `cafeteria` 데이터베이스를 생성하고 사용합니다.
 ~~~
 mysql> CREATE DATABASE cafeteria;
 ~~~
@@ -89,8 +90,6 @@ mysql> CREATE DATABASE cafeteria;
 ~~~
 mysql> use cafeteria
 ~~~
-
-`cafeteria` 데이터베이스를 생성하고 사용합니다.
 
 ### 사용자 생성
 
