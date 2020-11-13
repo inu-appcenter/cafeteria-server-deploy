@@ -120,4 +120,4 @@ Sequelize와의 연결을 위해 MySQL의 인증 방식을 변경합니다.
 mysql> ALTER USER '[사용자 이름]'@'localhost' IDENTIFIED WITH mysql_native_password by '[비밀번호]';
 ~~~
 
-> 설치가 완전히 끝나면 최초 한 번은 [sequelize 통합 테스트(Jest)](https://github.com/inu-appcenter/cafeteria-server/blob/master/test/integration/sequelize.test.mjs)를 실행해서 DB에 기본 데이터가 잘 저장되는지 확인해 주세요.
+> 설치가 완전히 끝나면 최초 한 번은 [`npm run setupdb`](https://github.com/inu-appcenter/cafeteria-server/blob/master/setup/setup-db.mjs)를 실행해서 DB에 기본 데이터를 추가하여 주세요.
