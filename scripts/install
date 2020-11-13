@@ -96,8 +96,10 @@ function create_env_file() {
   echo 'export DB_USERNAME=' >> $file &&
   echo 'export DB_PASSWORD=' >> $file &&
   echo 'export LOGIN_KEY=' >> $file &&
+  echo '' >> $file &&
   echo 'export TEST_ID=' >> $file &&
   echo 'export TEST_PW=' >> $file &&
+  echo '' >> $file &&
   echo 'export AWS_ACCESS_KEY_ID=' >> $file &&
   echo 'export AWS_SECRET_ACCESS_KEY=' >> $file &&
 
