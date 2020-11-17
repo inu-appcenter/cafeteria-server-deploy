@@ -47,7 +47,7 @@ function start() {
 
 	cd $CAFETERIA_INSTANCES/$target_instance_name &&
 
-	nohup npm start -- --host=$HOST --port=$target_instance_port --log-dir=../logs > /dev/null || exit 1 &
+	nohup npm start -- --host=$HOST --port=$target_instance_port --log-dir=../logs || exit 1 &
 }
 
 function wait() {
