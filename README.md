@@ -22,17 +22,32 @@ API 서버 배포를 위한 스크립트 & 가이드입니다.
 ## 목차
 
 - [요구 사항](#요구-사항)    
+- [서버 시간 설정](#서버-시간-설정)
 - [설치](#설치)    
 - [서버 명령어](#서버-명령어)
 - [DB 설정](#DB-설정)
 
-### 요구 사항
+## 요구 사항
 
 |-| `NodeJS` | `npm` | `MySQL Server` |
 |-|-|-|-|
 | 버전 | 12 이상 | 6 이상 | 5 이상 |
 
-### 설치
+## 서버 시간 설정
+
+서버 timezone을 맞추지 않은 경우, 이 과정이 필요합니다.
+
+> 할인 가능 시간대를 판단해야 하기 때문에 중요합니다.
+
+다음 명령으로 시간대를 설정합니다.
+
+~~~
+sudo dpkg-reconfigure tzdata
+~~~
+
+`Asia/Seoul`로 설정해 주세요.
+
+## 설치
 
 ```
 $ git clone https://github.com/inu-appcenter/cafeteria-server-deploy.git
