@@ -128,6 +128,10 @@ function completed() {
   echo "Please type 'source ~/.profile' in your shell to use server commands."
 }
 
+function failure() {
+  echo "Installation failed!"
+}
+
 is_already_installed &&
 ask &&
 install_full_icu &&
@@ -138,4 +142,4 @@ copy_nginx_configs &&
 copy_systemd_script &&
 create_env_file &&
 execute_deploy &&
-completed
+completed || failure
