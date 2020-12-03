@@ -97,9 +97,9 @@ $ ./install
 MySQL 설정 파일(`/etc/mysql/mysql.conf.d/mysqld.cnf`)에 다음을 추가합니다.
 
 ~~~
-collation-server        = utf8_unicode_ci
-init-connect            = 'SET NAMES utf8'
-character-set-server    = utf8
+collation-server = utf8mb4_unicode_ci
+character-set-server = utf8mb4
+skip-character-set-client-handshake
 ~~~
 
 ### MySQL CLI 시작
