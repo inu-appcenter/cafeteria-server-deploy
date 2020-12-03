@@ -3,11 +3,12 @@
 # Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
 
 # 앱 배포를 위한 제반 시설을 설치합니다.
-# 1. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
-# 2. Nginx 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
-# 3. Systemd 데몬 파일을 /etc/systemd/system에 복사하고 서비스를 활성화합니다.
-# 4. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
-# 4. deploy를 실행합니다.
+# 1. 날짜 스트링 지역화를 위한 full-icu를 전역적으로 설치합니다.
+# 2. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
+# 3. Nginx 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
+# 4. Systemd 데몬 파일을 /etc/systemd/system에 복사하고 서비스를 활성화합니다.
+# 5. ~/.cafeteria/exports.sh 파일을 생성하고 사용자에게 내용을 추가하도록 유도합니다.
+# 6. deploy를 실행합니다.
 
 # 설치 경로는 고정입니다.
 CAFETERIA_HOME=~/.cafeteria/
@@ -37,7 +38,7 @@ function is_already_installed() {
 }
 
 function ask() {
-  echo "This will install INU Cafeteria applicatoin to this server."
+  echo "This will install INU Cafeteria application to this server."
   read -p "Proceed? [Y/n] " -n 1 -r
 
   echo    # (optional) move to a new line
@@ -49,6 +50,11 @@ function ask() {
     echo "Cancel."
     exit 1
   fi
+}
+
+function install_full_icu() {
+  sudo npm install -g --unsafe-perm --silent --no-progress full-icu &&
+  echo "Installed full-icu."
 }
 
 function create_directories() {
@@ -72,7 +78,7 @@ function append_path() {
 }
 
 function copy_nginx_configs() {
-  cp $THIS_SCRIPT_PATH/../conf.d/* $CAFETERIA_CONFIGS/ &&
+  cp "$THIS_SCRIPT_PATH"/../conf.d/* $CAFETERIA_CONFIGS/ &&
   echo "Copied nginx configs."
 }
 
@@ -124,6 +130,7 @@ function completed() {
 
 is_already_installed &&
 ask &&
+install_full_icu &&
 create_directories &&
 copy_scripts &&
 append_path &&

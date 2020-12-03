@@ -44,6 +44,7 @@ function check_if_source_exists() {
 
 function start() {
 	source $ENVFILE_PATH &&
+	export NODE_ICU_DATA=/usr/lib/node_modules/full-icu && # Support toLocaleString()
 
 	cd $CAFETERIA_INSTANCES/$target_instance_name &&
 
