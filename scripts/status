@@ -35,7 +35,7 @@ function get_proxy() {
 
 function get_health() {
 	port=$1
-	response_code=$(curl -s -o /dev/null -w "%{http_code}" "127.0.0.1:$port/documentation")
+	response_code=$(curl -s -o /dev/null -w "%{http_code}" "127.0.0.1:$port/?statusCheck")
 
 	if [ "$response_code" == "200" ]; then
 		echo "Healthy"
