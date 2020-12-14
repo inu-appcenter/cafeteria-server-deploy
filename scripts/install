@@ -3,12 +3,13 @@
 # Korean broken? go https://github.com/inu-appcenter/cafeteria-server-deploy
 
 # 앱 배포를 위한 제반 시설을 설치합니다.
-# 1. 암호화된 번들로부터 exports.sh, cafeteria-firebase-admin-credentials.json 파일을 추출합니다.
-# 2. 날짜 스트링 지역화를 위한 full-icu를 전역적으로 설치합니다.
+# 1. 설치를 위한 디렉토리를 생성합니다.
+# 2. 암호화된 번들로부터 exports.sh, cafeteria-firebase-admin-credentials.json 파일을 추출합니다.
 # 3. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
 # 4. Nginx 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
 # 5. Systemd 데몬 파일을 /etc/systemd/system에 복사하고 서비스를 활성화합니다.
-# 6. deploy를 실행합니다.
+# 6. 날짜 스트링 지역화를 위한 full-icu를 전역적으로 설치합니다.
+# 7. deploy를 실행합니다.
 
 # 설치 경로는 고정입니다.
 CAFETERIA_HOME=~/.cafeteria/
@@ -37,7 +38,7 @@ function is_already_installed() {
   fi
 }
 
-function ask() {
+function ask_keep_or_not() {
   echo "This will install INU Cafeteria application to this server."
   read -p "Proceed? [Y/n] " -n 1 -r
 
@@ -50,6 +51,14 @@ function ask() {
     echo "Cancel."
     exit 1
   fi
+}
+
+function create_directories() {
+  mkdir -p $CAFETERIA_HOME &&
+  mkdir -p $CAFETERIA_BIN &&
+  mkdir -p $CAFETERIA_CONFIGS &&
+  mkdir -p $CAFETERIA_INSTANCES &&
+  echo "Created install directories."
 }
 
 function create_credential_files() {
@@ -67,27 +76,11 @@ function create_credential_files() {
   echo "Created credential files."
 }
 
-function install_full_icu() {
-  sudo npm install -g --unsafe-perm --silent --no-progress full-icu &&
-  echo "Installed full-icu."
-}
-
-function create_directories() {
-  mkdir -p $CAFETERIA_HOME &&
-  mkdir -p $CAFETERIA_BIN &&
-  mkdir -p $CAFETERIA_CONFIGS &&
-  mkdir -p $CAFETERIA_INSTANCES &&
-  echo "Created install directories."
-}
-
 function copy_scripts() {
   cp $THIS_SCRIPT_PATH/* $CAFETERIA_BIN/ &&
   echo "Copied scripts."
-}
 
-function append_path() {
   echo 'PATH="$HOME/.cafeteria/bin:$PATH"' >> ~/.profile &&
-
   source ~/.profile &&
   echo "Registered path."
 }
@@ -103,6 +96,11 @@ function copy_systemd_script() {
 
   sudo systemctl daemon-reload
   sudo systemctl enable cafeteria.service
+}
+
+function install_full_icu() {
+  sudo npm install -g --unsafe-perm --silent --no-progress full-icu &&
+  echo "Installed full-icu."
 }
 
 function execute_deploy() {
@@ -121,13 +119,12 @@ function failure() {
 }
 
 is_already_installed &&
-ask &&
-create_credential_files &&
-install_full_icu &&
+ask_keep_or_not &&
 create_directories &&
+create_credential_files &&
 copy_scripts &&
-append_path &&
 copy_nginx_configs &&
 copy_systemd_script &&
+install_full_icu &&
 execute_deploy &&
 completed || failure
