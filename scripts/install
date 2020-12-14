@@ -64,7 +64,7 @@ function create_directories() {
 
 function create_credential_files() {
   echo -n 'Enter master password: '
-  read -r password
+  read -s -p password
 
   # Decrypt
   echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json.gpg &&
