@@ -57,8 +57,8 @@ function create_credential_files() {
   read -r password
 
   # Decrypt
-  echo $password | gpg --batch --yes --passphrase-fd 0 cp $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json.gpg &&
-  echo $password | gpg --batch --yes --passphrase-fd 0 cp $THIS_SCRIPT_PATH/../credentials/exports.sh.gpg &&
+  echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json.gpg &&
+  echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/exports.sh.gpg &&
 
   # Move them to $CAFETERIA_HOME/
   mv $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json $CAFETERIA_HOME/ &&
