@@ -4,7 +4,7 @@
 
 # 앱 배포를 위한 제반 시설을 설치합니다.
 # 1. 설치를 위한 디렉토리를 생성합니다.
-# 2. 암호화된 번들로부터 exports.sh, cafeteria-firebase-admin-credentials.json 파일을 추출합니다.
+# 2. 암호화된 번들로부터 파일들을 추출합니다.
 # 3. 스크립트를 ~/.cafeteria/bin으로 이동하고 ~/.profile을 수정하여 PATH에 추가합니다.
 # 4. Nginx 설정 파일(예비용 포함)을 ~/.cafeteria/conf.d 로 복사합니다.
 # 5. Systemd 데몬 파일을 /etc/systemd/system에 복사하고 서비스를 활성화합니다.
@@ -22,7 +22,7 @@ THIS_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 function is_already_installed() {
   if [ -d "$CAFETERIA_HOME" ]; then
     echo "Cafeteria already installed."
-    read -p "Only update scripts and credentials? [Y/n]" -n 1 -r
+    read -p "Only update scripts, credentials, and nginx files? [Y/n]" -n 1 -r
 
     echo    # (optional) move to a new line
 
@@ -31,6 +31,7 @@ function is_already_installed() {
       echo "OK."
       copy_scripts
       create_credential_files
+      copy_nginx_configs
       exit 0
     else
       echo "Cancel."
@@ -68,10 +69,23 @@ function create_credential_files() {
   # Decrypt
   echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json.gpg &&
   echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/exports.sh.gpg &&
+  echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/letsencrypt.tar.gz.gpg &&
+
+  echo "Decrypted"
+
+  # Unzip
+  tar xzf $THIS_SCRIPT_PATH/../credentials/letsencrypt.tar.gz -C $THIS_SCRIPT_PATH/../credentials
+
+  echo "Unzipped"
 
   # Move them to $CAFETERIA_HOME/
   mv $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json $CAFETERIA_HOME/ &&
   mv $THIS_SCRIPT_PATH/../credentials/exports.sh $CAFETERIA_HOME/ &&
+
+  echo "Moved"
+
+  # Move to /etc
+  sudo mv $THIS_SCRIPT_PATH/../credentials/letsencrypt /etc
 
   echo "Created credential files."
 }
