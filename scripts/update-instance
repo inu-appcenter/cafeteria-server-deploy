@@ -7,6 +7,7 @@
 # 업데이트된 인스턴스는 자동으로 다시 실핼되지 않습니다.
 
 REPO=https://github.com/inu-appcenter/cafeteria-server.git
+REPO_NAME=inu-appcenter/cafeteria-server
 
 CAFETERIA_INSTANCES=~/.cafeteria/instances/
 
@@ -66,12 +67,18 @@ function kill_target_instance() {
   echo "Killed old version of app running on $target_instance_name"
 }
 
+function get_latest_release() {
+  curl --silent "https://api.github.com/repos/$1/releases/latest" | # Get latest release from GitHub api
+  grep '"tag_name":' |                                            # Get tag line
+  sed -E 's/.*"([^"]+)".*/\1/'                                    # Pluck JSON value
+}
+
 function download_and_install_app() {
   rm -rf $CAFETERIA_INSTANCES/$target_instance_name &&
   echo "Purged target instance directory." &&
 
   echo "Fetching..."
-  git clone $REPO $CAFETERIA_INSTANCES/$target_instance_name --quiet &&
+  git clone -b $(get_latest_release $REPO_NAME) $REPO $CAFETERIA_INSTANCES/$target_instance_name --quiet &&
   echo "Downloaded app." &&
 
   echo "Installing dependencies...(might take long)"
