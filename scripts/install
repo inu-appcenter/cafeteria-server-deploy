@@ -85,7 +85,7 @@ function create_credential_files() {
   echo "Moved" &&
 
   # Move to /etc
-  sudo mv $THIS_SCRIPT_PATH/../credentials/letsencrypt /etc/ &&
+  sudo mv -n $THIS_SCRIPT_PATH/../credentials/letsencrypt /etc/ &&
 
   echo "Created credential files."
 }
