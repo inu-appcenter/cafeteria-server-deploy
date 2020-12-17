@@ -19,7 +19,7 @@ function add_row() {
 function get_version() {
 	instance=$1
 
-	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count --all 2> /dev/null)"
+	echo "$(git --git-dir $CAFETERIA_INSTANCES/$instance/.git rev-list --count HEAD 2> /dev/null)"
 }
 
 function get_proxy() {
