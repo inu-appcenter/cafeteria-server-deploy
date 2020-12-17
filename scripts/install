@@ -30,8 +30,8 @@ function is_already_installed() {
     then
       echo "OK."
       copy_scripts
-      create_credential_files
       copy_nginx_configs
+      create_credential_files
       exit 0
     else
       echo "Cancel."
