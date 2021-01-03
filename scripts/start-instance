@@ -26,6 +26,13 @@ function determine_which_instance_to_start() {
 
   : ${target_instance_name:="instanceA"}
   : ${target_instance_port:="20201"}
+
+  # We also set a short name, to be used for logging in each instance.
+  if [ "$target_instance_port" = "20201" ]; then
+    target_instance_short_name="A"
+  else
+    target_instance_short_name="B"
+  fi
 }
 
 function check_if_already_running() {
@@ -47,7 +54,7 @@ function start() {
 
 	cd $CAFETERIA_INSTANCES/$target_instance_name &&
 
-	nohup npm start -- --host=$HOST --port=$target_instance_port --log-dir=../logs || exit 1 &
+	nohup npm start -- --host=$HOST --port=$target_instance_port --log-dir=../logs --instance-name=$target_instance_short_name || exit 1 &
 }
 
 function wait() {
