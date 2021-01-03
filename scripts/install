@@ -22,7 +22,7 @@ THIS_SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 function is_already_installed() {
   if [ -d "$CAFETERIA_HOME" ]; then
     echo "Cafeteria already installed."
-    read -p "Only update scripts, credentials, and nginx files? [Y/n]" -n 1 -r
+    read -p "Only update scripts, nginx files(not including ssl certificates)? [Y/n]" -n 1 -r
 
     echo    # (optional) move to a new line
 
@@ -31,7 +31,7 @@ function is_already_installed() {
       echo "OK."
       copy_scripts
       copy_nginx_configs
-      create_credential_files
+      create_credential_files false
       exit 0
     else
       echo "Cancel."
@@ -64,30 +64,39 @@ function create_directories() {
 }
 
 function create_credential_files() {
+  # Decrypt and copy Firebase admin credentials, export variables, and Let's Encrypt certificates(optional).
+
+  # It is user's option to select whether to overwrite an ssl certificate over the existing one, or do noting.
+  # Default true.
+  if [ $# -eq 0 ]; then
+    overwrite_ssl_certificate=true
+  else
+    overwrite_ssl_certificate="$1"
+  fi
+
   read -s -p 'Enter master password: ' password
 
-  # Decrypt
   echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json.gpg &&
   echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/exports.sh.gpg &&
-  echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/letsencrypt.tar.gz.gpg &&
+  echo "Decrypted firebase credentials and export variables." &&
 
-  echo "Decrypted" &&
-
-  # Unzip
-  tar xzf $THIS_SCRIPT_PATH/../credentials/letsencrypt.tar.gz -C $THIS_SCRIPT_PATH/../credentials
-
-  echo "Unzipped" &&
-
-  # Move them to $CAFETERIA_HOME/
   mv $THIS_SCRIPT_PATH/../credentials/cafeteria-firebase-admin-credentials.json $CAFETERIA_HOME/ &&
   mv $THIS_SCRIPT_PATH/../credentials/exports.sh $CAFETERIA_HOME/ &&
+  echo "Moved firebase credentials and export variables to their right places." &&
+  echo "Created credential files (Firebase credentials and export variables)." || exit 1 # No need to execute more.
 
-  echo "Moved" &&
+  # Optional: copy the ssl certificates.
+  if [ $overwrite_ssl_certificate = true ]; then
+    echo $password | gpg --batch --yes --passphrase-fd 0 $THIS_SCRIPT_PATH/../credentials/letsencrypt.tar.gz.gpg &&
+    echo "Decrypted letsencrypt certificates." &&
 
-  # Move to /etc
-  sudo mv -n $THIS_SCRIPT_PATH/../credentials/letsencrypt /etc/ &&
+    tar xzf $THIS_SCRIPT_PATH/../credentials/letsencrypt.tar.gz -C $THIS_SCRIPT_PATH/../credentials &&
+    echo "Uncompressed letsencrypt certificates." &&
 
-  echo "Created credential files."
+    sudo mv -n $THIS_SCRIPT_PATH/../credentials/letsencrypt /etc/ &&
+    echo "Moved letsencrypt certificates to their right place." &&
+    echo "Created credential files (Let's Encrypt certificates)."
+  fi
 }
 
 function copy_scripts() {
