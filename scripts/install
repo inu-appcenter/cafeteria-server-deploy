@@ -31,7 +31,7 @@ function is_already_installed() {
       echo "OK."
       copy_scripts
       copy_nginx_configs
-      create_credential_files false
+      create_credential_files false # Not overwrite existing Let's Encrypt certificates.
       exit 0
     else
       echo "Cancel."
