@@ -70,12 +70,20 @@ services:
       - --certificatesresolvers.le.acme.storage=/certificates/acme.json
       # 인증서 발급 때에는 TLS 챌린지를 사용합니다.
       - --certificatesresolvers.le.acme.tlschallenge=true
+      # Metric 켭니다.
+      - --metrics.prometheus=true
+      - --metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000
+      - --metrics.prometheus.addEntryPointsLabels=true
+      - --metrics.prometheus.addrouterslabels=true
+      - --metrics.prometheus.addServicesLabels=true
+      - --entryPoints.metrics.address=:8082
+      - --metrics.prometheus.entryPoint=metrics
       # HTTP 요청 접근 기록을 남깁니다.
       - --accesslog
-      # 로그 활성화합니다.
-      - --log
       # 대시보드와 API를 활성화합니다.
       - --api
+      # 로그 활성화합니다.
+      - --log
     networks:
       # 사전에 정의해 둔 퍼블릭 네트워크를 Traefik과 다른 서비스 사이에서 공유합니다.
       - traefik-public
