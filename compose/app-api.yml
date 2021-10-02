@@ -26,6 +26,20 @@ services:
         - traefik.http.routers.app-api-https.tls=true
         - traefik.http.routers.app-api-https.rule=Host(`api.potados.com`)
         - traefik.http.routers.app-api-https.entrypoints=https
+    secrets:
+      - DB_HOST
+      - DB_USERNAME
+      - DB_PASSWORD
+      - LOGIN_KEY
+      - TEST_ID
+      - TEST_PW
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - SMTP_USERNAME
+      - SMTP_PASSWORD
+      - SMS_API_KEY
+      - SMS_API_SECRET
+      - JWT_SECRET_KEY
     networks:
       - traefik-public
     environment:

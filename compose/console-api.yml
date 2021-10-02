@@ -26,6 +26,15 @@ services:
         - traefik.http.routers.console-api-https.tls=true
         - traefik.http.routers.console-api-https.rule=Host(`console-api.potados.com`)
         - traefik.http.routers.console-api-https.entrypoints=https
+    secrets:
+      - ADMIN_ID
+      - ADMIN_PW
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DB_HOST
+      - DB_USERNAME
+      - DB_PASSWORD
+      - JWT_SECRET_KEY
     networks:
       - traefik-public
     environment:
