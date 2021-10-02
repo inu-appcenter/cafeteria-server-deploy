@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  app-api:
+    image: ghcr.io/inu-appcenter/cafeteria-server:latest
+    ports:
+      - "20201:20201"
+    deploy:
+      labels:
+        # Traefik에 등록하기 위해 설정해 줍니다.
+        - traefik.enable=true
+
+        # 명시적으로 지정해 주어야 Traefik이 ingress 네트워크에서 헷갈리지 않고 찾아갈 수 있습니다.
+        # https://community.traefik.io/t/issue-gateway-timeout-when-using-traefik-and-exposing-port-with-docker/8858 참조.
+        - traefik.docker.network=traefik-public
+
+        # 20201번 포트로 연결합니다.
+        - traefik.http.services.app-api.loadbalancer.server.port=20201
+
+        # HTTP 연결은 받아서 바로 HTTPS로 넘깁니다.
+        - traefik.http.routers.app-api-http.rule=Host(`api.potados.com`)
+        - traefik.http.routers.app-api-http.entrypoints=http
+        - traefik.http.routers.app-api-http.middlewares=https-redirect
+
+        # HTTPS 요청을 받아서 처리합니다.
+        - traefik.http.routers.app-api-https.tls=true
+        - traefik.http.routers.app-api-https.rule=Host(`api.potados.com`)
+        - traefik.http.routers.app-api-https.entrypoints=https
+    networks:
+      - traefik-public
+    environment:
+      PORT: 20201
+      NODE_ENV: production
+      LOG_DIR: ./logs
+
+# 기존에 쓰던 것과 같은 이름으로 넘겨 주면 앱에서 알아서 잘 찾습니다.
+secrets:
+  DB_HOST:
+    external: true
+  DB_USERNAME:
+    external: true
+  DB_PASSWORD:
+    external: true
+  LOGIN_KEY:
+    external: true
+  TEST_ID:
+    external: true
+  TEST_PW:
+    external: true
+  AWS_ACCESS_KEY_ID:
+    external: true
+  AWS_SECRET_ACCESS_KEY:
+    external: true
+  SMTP_USERNAME:
+    external: true
+  SMTP_PASSWORD:
+    external: true
+  SMS_API_KEY:
+    external: true
+  SMS_API_SECRET:
+    external: true
+  JWT_SECRET_KEY:
+    external: true
+
+networks:
+  # 외부에서 정의된 네트워크를 가져다 씁니다.
+  traefik-public:
+    external: true
