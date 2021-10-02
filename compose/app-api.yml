@@ -46,6 +46,7 @@ services:
       PORT: 20201
       NODE_ENV: production
       LOG_DIR: ./logs
+      INSTANCE_NAME: main
 
 # 기존에 쓰던 것과 같은 이름으로 넘겨 주면 앱에서 알아서 잘 찾습니다.
 secrets:
