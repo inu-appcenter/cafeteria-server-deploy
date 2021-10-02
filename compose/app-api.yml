@@ -3,9 +3,10 @@ version: "3.9"
 services:
   app-api:
     image: ghcr.io/inu-appcenter/cafeteria-server:latest
-    ports:
-      - "20201:20201"
+    stop_grace_period: 120s
     deploy:
+      update_config:
+        order: start-first
       labels:
         # Traefik에 등록하기 위해 설정해 줍니다.
         - traefik.enable=true
