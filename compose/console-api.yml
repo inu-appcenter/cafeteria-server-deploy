@@ -19,13 +19,13 @@ services:
         - traefik.http.services.console-api.loadbalancer.server.port=40401
 
         # HTTP 연결은 받아서 바로 HTTPS로 넘깁니다.
-        - traefik.http.routers.console-api-http.rule=Host(`console-api.potados.com`)
+        - traefik.http.routers.console-api-http.rule=Host(`console-api.inu-cafeteria.app`)
         - traefik.http.routers.console-api-http.entrypoints=http
         - traefik.http.routers.console-api-http.middlewares=https-redirect
 
         # HTTPS 요청을 받아서 처리합니다.
         - traefik.http.routers.console-api-https.tls=true
-        - traefik.http.routers.console-api-https.rule=Host(`console-api.potados.com`)
+        - traefik.http.routers.console-api-https.rule=Host(`console-api.inu-cafeteria.app`)
         - traefik.http.routers.console-api-https.entrypoints=https
     secrets:
       - ADMIN_ID

@@ -19,13 +19,13 @@ services:
         - traefik.http.services.app-api.loadbalancer.server.port=20201
 
         # HTTP 연결은 받아서 바로 HTTPS로 넘깁니다.
-        - traefik.http.routers.app-api-http.rule=Host(`api.potados.com`)
+        - traefik.http.routers.app-api-http.rule=Host(`api.inu-cafeteria.app`)
         - traefik.http.routers.app-api-http.entrypoints=http
         - traefik.http.routers.app-api-http.middlewares=https-redirect
 
         # HTTPS 요청을 받아서 처리합니다.
         - traefik.http.routers.app-api-https.tls=true
-        - traefik.http.routers.app-api-https.rule=Host(`api.potados.com`)
+        - traefik.http.routers.app-api-https.rule=Host(`api.inu-cafeteria.app`)
         - traefik.http.routers.app-api-https.entrypoints=https
     secrets:
       - DB_HOST
