@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+  console-api:
+    image: ghcr.io/inu-appcenter/cafeteria-console-server:latest
+    stop_grace_period: 120s
+    deploy:
+      update_config:
+        order: start-first
+      labels:
+        # Traefik에 등록하기 위해 설정해 줍니다.
+        - traefik.enable=true
+
+        # 명시적으로 지정해 주어야 Traefik이 ingress 네트워크에서 헷갈리지 않고 찾아갈 수 있습니다.
+        # https://community.traefik.io/t/issue-gateway-timeout-when-using-traefik-and-exposing-port-with-docker/8858 참조.
+        - traefik.docker.network=traefik-public
+
+        # 40401번 포트로 연결합니다.
+        - traefik.http.services.console-api.loadbalancer.server.port=40401
+
+        # HTTP 연결은 받아서 바로 HTTPS로 넘깁니다.
+        - traefik.http.routers.console-api-http.rule=Host(`console-api.inu-cafeteria.app`)
+        - traefik.http.routers.console-api-http.entrypoints=http
+        - traefik.http.routers.console-api-http.middlewares=https-redirect
+
+        # HTTPS 요청을 받아서 처리합니다.
+        - traefik.http.routers.console-api-https.tls=true
+        - traefik.http.routers.console-api-https.rule=Host(`console-api.inu-cafeteria.app`)
+        - traefik.http.routers.console-api-https.entrypoints=https
+    secrets:
+      - ADMIN_ID
+      - ADMIN_PW
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DB_HOST
+      - DB_USERNAME
+      - DB_PASSWORD
+      - JWT_SECRET_KEY
+    networks:
+      - traefik-public
+    environment:
+      PORT: 40401
+      NODE_ENV: production
+
+# 기존에 쓰던 것과 같은 이름으로 넘겨 주면 앱에서 알아서 잘 찾습니다.
+secrets:
+  ADMIN_ID:
+    external: true
+  ADMIN_PW:
+    external: true
+  AWS_ACCESS_KEY_ID:
+    external: true
+  AWS_SECRET_ACCESS_KEY:
+    external: true
+  DB_HOST:
+    external: true
+  DB_USERNAME:
+    external: true
+  DB_PASSWORD:
+    external: true
+  JWT_SECRET_KEY:
+    external: true
+
+networks:
+  # 외부에서 정의된 네트워크를 가져다 씁니다.
+  traefik-public:
+    external: true
