@@ -44,6 +44,8 @@ services:
     networks:
       - traefik-public
     environment:
+      # TZ는 cafeteria-backend-core에 의해 Asia/Seoul로 오버라이드되지만 써놓긴 합니다.
+      TZ: Asia/Seoul
       PORT: 20201
       NODE_ENV: production
       LOG_DIR: ./logs
