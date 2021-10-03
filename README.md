@@ -180,7 +180,7 @@ $ sudo usermod -aG docker $USER
 총 세 개의 스택으로 이루어져 있습니다. 차례대로 배포(또는 업데이트)해주면 됩니다.
 
 ```bash
-$ ./deploy-traefik # 에지 라우터
-$ ./deploy-app-api # 앱 서버
-$ ./deploy-console-server # 콘솔 서버
+$ ./deploy-traefik.sh # 에지 라우터
+$ ./deploy-app-api.sh # 앱 서버
+$ ./deploy-console-server.sh # 콘솔 서버
 ```
