@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker stack deploy -c compose/app-api.yml app-api
+docker stack deploy -c compose/cafeteria.yml app-api
